@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import { APPLICATION_KEY, API_KEY } from '../../src/ddCredentials';
-import { DdSdkReactNative, TrackingConsent } from '@datadog/mobile-react-native';
+import { DdLogs, DdSdkReactNative, TrackingConsent } from '@datadog/mobile-react-native';
 import { getTrackingConsent, saveTrackingConsent } from '../utils';
 import { ConsentModal } from '../components/consent';
 
@@ -114,6 +114,20 @@ export default class MainScreen extends Component<any, MainScreenState> {
     return <View style={styles.defaultScreen}>
       <Text>{this.state.welcomeMessage}</Text>
       <View style={{ marginTop: 40, alignItems: "center" }}>
+        <Button
+          title={`Crash on log`}
+          onPress={() => {
+            const context = {}
+
+            Object.defineProperty(context, 'boom', {
+              value: 'boom',
+              enumerable: true,
+              configurable: false
+            })
+
+            DdLogs.info('Boom', context)
+          }}
+        />
         <Button
           title={`Tracking Consent: ${this.state.trackingConsent}`}
           accessibilityLabel="update_tracking_consent"
